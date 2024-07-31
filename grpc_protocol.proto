@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package edgestream;
+
+service DistributionService {
+  rpc AssignTask (TaskAssignment) returns (TaskAcknowledgement) {}
+  rpc UpdateTaskStatus (TaskStatusUpdate) returns (StatusAcknowledgement) {}
+  rpc ReportMetrics (MetricsReport) returns (MetricsAcknowledgement) {}
+}
+
+message TaskAssignment {
+  string task_id = 1;
+  string pipeline_id = 2;
+  repeated Stage stages = 3;
+  map<string, string> configuration = 4;
+}
+
+message TaskAcknowledgement {
+  bool accepted = 1;
+  string message = 2;
+}
+
+message TaskStatusUpdate {
+  string task_id = 1;
+  TaskStatus status = 2;
+  string message = 3;
+}
+
+message StatusAcknowledgement {
+  bool received = 1;
+}
+
+message MetricsReport {
+  string node_id = 1;
+  double cpu_usage = 2;
+  double memory_usage = 3;
+  int64 processed_events = 4;
+  double processing_latency = 5;
+}
+
+message MetricsAcknowledgement {
+  bool received = 1;
+}
+
+enum TaskStatus {
+  PENDING = 0;
+  RUNNING = 1;
+  COMPLETED = 2;
+  FAILED = 3;
+}
+
+message Stage {
+  string stage_id = 1;
+  string operator_type = 2;
+  bytes serialized_operator = 3;
+}

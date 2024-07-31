@@ -1,0 +1,8 @@
+[package]
+name = "sp_framework"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+protobuf = "2.0"
+grpc = "0.6"
